@@ -3,33 +3,36 @@
 
 #include "qnitexyartist.h"
 
-class QniteCircle : public QniteXYArtist
-{
-    Q_OBJECT
-    Q_PROPERTY(QList<int> selectedIndexes READ selectedIndexes)
-    Q_PROPERTY(int highlightedIndex READ highlightedIndex)
+class QniteCircle : public QniteXYArtist {
+  Q_OBJECT
+  Q_PROPERTY(QList<int> selectedIndexes READ selectedIndexes)
+  Q_PROPERTY(int highlightedIndex READ highlightedIndex)
 
 public:
-    explicit QniteCircle(QQuickItem *parent = 0);
-    virtual ~QniteCircle();
+  explicit QniteCircle(QQuickItem *parent = nullptr);
+  virtual ~QniteCircle() Q_DECL_OVERRIDE;
 
-    QList<int> selectedIndexes() const { return m_selectedPoints.toList(); }
-    int highlightedIndex() const { return m_highlightedPoint; }
+  QList<int> selectedIndexes() const { return m_selectedIndexes.values(); }
+  int highlightedIndex() const { return m_highlightedIndex; }
 
-    bool select(const QList<QPoint>&) Q_DECL_OVERRIDE;
-    bool select(const QPoint) Q_DECL_OVERRIDE;
-    Q_INVOKABLE void clearSelection() Q_DECL_OVERRIDE;
+  QList<int> selectedIds() const { return m_selectedIds.values(); }
+  int highlightedId() const { return m_highlightedId; }
 
-    Q_INVOKABLE void select(QList<int> indexes);
-    Q_INVOKABLE void highlight(int index);
+  bool select(const QList<QPoint> &) Q_DECL_OVERRIDE;
+  bool select(const QPoint) Q_DECL_OVERRIDE;
+  Q_INVOKABLE void clearSelection() Q_DECL_OVERRIDE;
 
-    QNanoQuickItemPainter* createItemPainter() const Q_DECL_OVERRIDE;
+  Q_INVOKABLE void select(QList<int> indexes);
+  Q_INVOKABLE void highlight(int index);
+
+  QNanoQuickItemPainter *createItemPainter() const Q_DECL_OVERRIDE;
 
 private:
-    QSet<int> m_selectedPoints; //! here we store the indexes of selected points
-    int m_highlightedPoint;
+  QSet<int> m_selectedIds; //! here we store the ids of selected points
+  int m_highlightedId;
+
+  QSet<int> m_selectedIndexes;
+  int m_highlightedIndex;
 };
 
-
 #endif // QNITE_CIRCLE_H
-
